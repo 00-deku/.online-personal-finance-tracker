@@ -1,0 +1,16 @@
+target/
+*.class
+
+# IDE files
+.idea/
+.vscode/
+
+# Logs
+*.log
+
+# Environment & database credentials
+.env
+db.properties
+
+# Windows
+desktop.ini

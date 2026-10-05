@@ -1,0 +1,91 @@
+/* ==========================================================================
+   AUTHENTICATION STYLES (auth.css)
+   Target pages: WEB-INF/views/auth/login.jsp, WEB-INF/views/auth/register.jsp
+   ========================================================================== */
+
+.auth-wrapper {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-3);
+    background-color: var(--bg-main);
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 380px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.auth-header {
+    margin-bottom: var(--space-4);
+}
+
+.auth-brand {
+    font-size: 1.2rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    margin-bottom: var(--space-3);
+    display: inline-block;
+}
+
+.auth-title {
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: var(--text-primary);
+    margin-bottom: 4px;
+}
+
+.auth-subtitle {
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+}
+
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+}
+
+.auth-options {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 4px;
+    margin-bottom: var(--space-2);
+    font-size: 0.8rem;
+}
+
+.auth-forgot-link {
+    color: var(--text-secondary);
+    text-decoration: underline;
+}
+
+.auth-forgot-link:hover {
+    color: var(--text-primary);
+}
+
+.auth-footer {
+    margin-top: var(--space-4);
+    padding-top: var(--space-3);
+    border-top: 1px solid var(--border-subtle);
+    font-size: 0.8125rem;
+    color: var(--text-secondary);
+    text-align: center;
+}
+
+.auth-footer a {
+    color: var(--text-primary);
+    font-weight: 500;
+    text-decoration: underline;
+}
+
+.auth-footer a:hover {
+    color: #FFFFFF;
+}
