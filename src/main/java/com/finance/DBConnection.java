@@ -1,17 +1,45 @@
 package com.finance;
 
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.util.Properties;
 
+/**
+ * Utility class to manage MySQL database connections for the application.
+ * Connects to the local MySQL database 'suspicious4'.
+ */
 public class DBConnection {
 
-    private static final String URL =
-            "jdbc:mysql://localhost:3306/suspicious4";
+    private static final String URL;
+    private static final String USER;
+    private static final String PASSWORD;
 
-    private static final String USER = "root";
+    static {
+        try {
+            Properties properties = new Properties();
 
-    private static final String PASSWORD = "134521";
+            InputStream input = DBConnection.class
+                    .getClassLoader()
+                    .getResourceAsStream("db.properties");
+
+            if (input == null) {
+                throw new RuntimeException("db.properties file not found");
+            }
+
+            properties.load(input);
+
+            URL = properties.getProperty("db.url");
+            USER = properties.getProperty("db.user");
+            PASSWORD = properties.getProperty("db.password");
+
+            input.close();
+
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load database configuration", e);
+        }
+    }
 
     public static Connection getConnection() throws SQLException {
         return DriverManager.getConnection(URL, USER, PASSWORD);
