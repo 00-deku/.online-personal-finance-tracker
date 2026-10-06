@@ -1,13 +1,13 @@
 # Frontend-Backend Integration Contract & Specification
 **Project:** Online Personal Finance Management System (`Finance.`)  
-**Target Architecture:** Java 21, Maven WAR, Jakarta Servlet 6.1, Tomcat 11, JSP, JDBC, MySQL (`sucius4`)  
+**Target Architecture:** Java 26, Maven WAR, Jakarta Servlet 6.1, Tomcat 11, JSP, JDBC, MySQL (`suspicious4`)  
 **Context Path:** `/finance/`
 
 ---
 
 ## 1. Database Schema Reference (Source of Truth)
 
-All frontend forms, tables, and attributes map strictly to these 5 tables in the `sucius4` database:
+All frontend forms, tables, and attributes map strictly to these 5 tables in the `suspicious4` database:
 
 ### `user` Table
 | Column Name | Type | Constraints | Description |
