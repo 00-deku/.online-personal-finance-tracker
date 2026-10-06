@@ -13,4 +13,3 @@
     <link rel="shortcut icon" href="${pageContext.request.contextPath}/assets/images/favicon.ico" type="image/x-icon">
 </head>
 <body>
-<div class="app-container">

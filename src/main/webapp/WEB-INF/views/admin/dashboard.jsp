@@ -16,6 +16,12 @@
     <main class="main-content">
         <div class="content-wrapper">
             
+            <c:if test="${not empty errorMessage}">
+                <div class="alert alert-error mb-4">
+                    ${errorMessage}
+                </div>
+            </c:if>
+
             <div class="page-header">
                 <div>
                     <h1 class="page-title">Admin Dashboard</h1>
@@ -27,19 +33,19 @@
             <div class="stats-grid mb-4">
                 <div class="stat-card">
                     <div class="stat-label">Total Users</div>
-                    <div class="stat-value"><c:choose><c:when test="${not empty totalUserCount}">${totalUserCount}</c:when><c:otherwise>—</c:otherwise></c:choose></div>
+                    <div class="stat-value"><c:choose><c:when test="${not empty totalUserCount}">${totalUserCount}</c:when><c:otherwise>0</c:otherwise></c:choose></div>
                     <div class="stat-subtext">Registered accounts</div>
                 </div>
 
                 <div class="stat-card">
                     <div class="stat-label">Total Expenses</div>
-                    <div class="stat-value"><c:choose><c:when test="${not empty totalExpensesCount}">${totalExpensesCount}</c:when><c:otherwise>—</c:otherwise></c:choose></div>
+                    <div class="stat-value"><c:choose><c:when test="${not empty totalExpensesCount}">${totalExpensesCount}</c:when><c:otherwise>0</c:otherwise></c:choose></div>
                     <div class="stat-subtext">System transactions</div>
                 </div>
 
                 <div class="stat-card">
                     <div class="stat-label">Pending Feedback</div>
-                    <div class="stat-value"><c:choose><c:when test="${not empty pendingFeedbackCount}">${pendingFeedbackCount}</c:when><c:otherwise>—</c:otherwise></c:choose></div>
+                    <div class="stat-value"><c:choose><c:when test="${not empty pendingFeedbackCount}">${pendingFeedbackCount}</c:when><c:otherwise>0</c:otherwise></c:choose></div>
                     <div class="stat-subtext">Tickets needing review</div>
                 </div>
             </div>
@@ -112,7 +118,7 @@
                                     <tbody>
                                         <c:forEach items="${feedbackList}" var="fb">
                                             <tr>
-                                                <td class="font-mono">${fb.user_id}</td>
+                                                <td class="font-mono">${fb.userId != null ? fb.userId : fb.user_id}</td>
                                                 <td><span class="badge badge-info">${fb.status}</span></td>
                                                 <td>${fb.message}</td>
                                             </tr>
@@ -133,7 +139,5 @@
             </div>
 
         </div>
-    </main>
-</div>
-
 <jsp:include page="../common/footer.jsp"/>
+

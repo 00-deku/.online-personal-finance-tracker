@@ -81,28 +81,26 @@
                 </form>
             </div>
 
-            <!-- Submit Feedback Form -->
+            <!-- Submit Feedback / Ask for Advice Form -->
             <div class="card">
                 <div class="card-header">
-                    <div class="card-title">Submit Feedback</div>
+                    <div class="card-title">Submit Feedback / Request Advice</div>
                 </div>
 
                 <form id="feedbackForm" method="post" action="${pageContext.request.contextPath}/feedback/submit" novalidate>
                     <input type="hidden" name="user_id" value="${sessionScope.user.id}">
 
                     <div class="form-group">
-                        <label for="message" class="form-label">Message</label>
-                        <textarea id="message" name="message" class="form-control" placeholder="Write feedback or report an issue..." maxlength="100" required></textarea>
+                        <label for="message" class="form-label">Message / Advice Request</label>
+                        <textarea id="message" name="message" class="form-control" placeholder="Write feedback or request financial advice from an advisor..." maxlength="100" required></textarea>
                         <span class="form-hint">Maximum 100 characters</span>
-                        <span class="form-error">Feedback message cannot be empty (max 100 characters).</span>
+                        <span class="form-error">Message cannot be empty (max 100 characters).</span>
                     </div>
 
-                    <button type="submit" class="btn btn-primary">Submit Feedback</button>
+                    <button type="submit" class="btn btn-primary">Submit Request</button>
                 </form>
             </div>
 
         </div>
-    </main>
-</div>
-
 <jsp:include page="../common/footer.jsp"/>
+

@@ -3,7 +3,7 @@
         <footer class="app-footer">
             <p>&copy; 2026 Online Personal Finance Management System | Built with JSP & Servlet Architecture</p>
         </footer>
-    </div> <!-- end .main-content -->
+    </main> <!-- end .main-content -->
 </div> <!-- end .app-container -->
 
 <!-- Global Vanilla JS Dependencies -->

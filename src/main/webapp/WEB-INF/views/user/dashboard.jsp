@@ -16,6 +16,12 @@
     <main class="main-content">
         <div class="content-wrapper">
             
+            <c:if test="${not empty errorMessage}">
+                <div class="alert alert-error mb-4">
+                    ${errorMessage}
+                </div>
+            </c:if>
+
             <!-- Dashboard Heading -->
             <div class="page-header">
                 <div>
@@ -34,8 +40,8 @@
                     <div class="stat-label">Total Expenses</div>
                     <div class="stat-value">
                         <c:choose>
-                            <c:if test="${not empty totalExpenses}">₹${totalExpenses}</c:if>
-                            <c:otherwise>—</c:otherwise>
+                            <c:when test="${not empty totalExpenses}">₹${totalExpenses}</c:when>
+                            <c:otherwise>₹0.00</c:otherwise>
                         </c:choose>
                     </div>
                     <div class="stat-subtext">Sum of recorded expenses</div>
@@ -45,8 +51,8 @@
                     <div class="stat-label">Current Budget</div>
                     <div class="stat-value">
                         <c:choose>
-                            <c:if test="${not empty totalBudget}">₹${totalBudget}</c:if>
-                            <c:otherwise>—</c:otherwise>
+                            <c:when test="${not empty totalBudget}">₹${totalBudget}</c:when>
+                            <c:otherwise>₹0.00</c:otherwise>
                         </c:choose>
                     </div>
                     <div class="stat-subtext">Active limit</div>
@@ -56,8 +62,8 @@
                     <div class="stat-label">Remaining Budget</div>
                     <div class="stat-value">
                         <c:choose>
-                            <c:if test="${not empty remainingBudget}">₹${remainingBudget}</c:if>
-                            <c:otherwise>—</c:otherwise>
+                            <c:when test="${not empty remainingBudget}">₹${remainingBudget}</c:when>
+                            <c:otherwise>₹0.00</c:otherwise>
                         </c:choose>
                     </div>
                     <div class="stat-subtext">Available buffer</div>
@@ -182,7 +188,7 @@
                                 <c:forEach items="${adviceList}" var="adv">
                                     <div class="advice-card">
                                         <div class="advice-meta">
-                                            <span>Advisor ID: ${adv.advisor_id}</span>
+                                            <span>Advisor ID: ${adv.advisorId != null ? adv.advisorId : adv.advisor_id}</span>
                                             <span>${adv.date}</span>
                                         </div>
                                         <div class="advice-content">${adv.message}</div>
@@ -203,7 +209,5 @@
             </div>
 
         </div>
-    </main>
-</div>
-
 <jsp:include page="../common/footer.jsp"/>
+

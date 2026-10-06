@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" pageEncoding="UTF-8" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
 <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
 <aside class="app-sidebar" id="appSidebar">
@@ -7,69 +8,80 @@
         Finance.
     </div>
 
-    <!-- User Core Navigation -->
-    <ul class="sidebar-menu mb-3">
-        <li class="sidebar-item ${param.activePage == 'dashboard' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/user/dashboard">
-                <span>Dashboard</span>
-            </a>
-        </li>
-        <li class="sidebar-item ${param.activePage == 'expenses' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/user/expenses">
-                <span>Expenses</span>
-            </a>
-        </li>
-        <li class="sidebar-item ${param.activePage == 'budgets' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/user/budgets">
-                <span>Budgets</span>
-            </a>
-        </li>
-        <li class="sidebar-item ${param.activePage == 'reports' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/user/reports">
-                <span>Reports</span>
-            </a>
-        </li>
-        <li class="sidebar-item ${param.activePage == 'profile' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/user/profile">
-                <span>Profile</span>
-            </a>
-        </li>
-    </ul>
+    <c:set var="userRole" value="${sessionScope.user != null ? sessionScope.user.role : 'USER'}"/>
 
-    <!-- Advisor Navigation (rendered when role is ADVISOR or for testing) -->
-    <div class="sidebar-heading">Advisor</div>
-    <ul class="sidebar-menu mb-3">
-        <li class="sidebar-item ${param.activePage == 'advisor-dashboard' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/advisor/dashboard">
-                <span>Advisor Overview</span>
-            </a>
-        </li>
-        <li class="sidebar-item ${param.activePage == 'advisor-advice' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/advisor/advice">
-                <span>Advice Management</span>
-            </a>
-        </li>
-    </ul>
+    <c:choose>
+        <%-- ADVISOR MENU --%>
+        <c:when test="${userRole == 'ADVISOR'}">
+            <div class="sidebar-heading">Advisor Menu</div>
+            <ul class="sidebar-menu mb-3">
+                <li class="sidebar-item ${param.activePage == 'advisor-dashboard' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/advisor/dashboard">
+                        <span>Advisor Overview</span>
+                    </a>
+                </li>
+                <li class="sidebar-item ${param.activePage == 'advisor-advice' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/advisor/advice">
+                        <span>Client Advice & Expenses</span>
+                    </a>
+                </li>
+            </ul>
+        </c:when>
 
-    <!-- Admin Navigation (rendered when role is ADMIN or for testing) -->
-    <div class="sidebar-heading">Admin</div>
-    <ul class="sidebar-menu mb-3">
-        <li class="sidebar-item ${param.activePage == 'admin-dashboard' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/admin/dashboard">
-                <span>Admin Dashboard</span>
-            </a>
-        </li>
-        <li class="sidebar-item ${param.activePage == 'admin-users' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/admin/users">
-                <span>Users</span>
-            </a>
-        </li>
-        <li class="sidebar-item ${param.activePage == 'admin-feedback' ? 'active' : ''}">
-            <a href="${pageContext.request.contextPath}/admin/feedback">
-                <span>Feedback</span>
-            </a>
-        </li>
-    </ul>
+        <%-- ADMIN MENU --%>
+        <c:when test="${userRole == 'ADMIN'}">
+            <div class="sidebar-heading">Admin Menu</div>
+            <ul class="sidebar-menu mb-3">
+                <li class="sidebar-item ${param.activePage == 'admin-dashboard' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/admin/dashboard">
+                        <span>Admin Overview</span>
+                    </a>
+                </li>
+                <li class="sidebar-item ${param.activePage == 'admin-users' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/admin/users">
+                        <span>User Accounts</span>
+                    </a>
+                </li>
+                <li class="sidebar-item ${param.activePage == 'admin-feedback' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/admin/feedback">
+                        <span>System Feedback</span>
+                    </a>
+                </li>
+            </ul>
+        </c:when>
+
+        <%-- USER MENU (DEFAULT) --%>
+        <c:otherwise>
+            <div class="sidebar-heading">Personal Finance</div>
+            <ul class="sidebar-menu mb-3">
+                <li class="sidebar-item ${param.activePage == 'dashboard' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/user/dashboard">
+                        <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="sidebar-item ${param.activePage == 'expenses' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/user/expenses">
+                        <span>Expenses</span>
+                    </a>
+                </li>
+                <li class="sidebar-item ${param.activePage == 'budgets' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/user/budgets">
+                        <span>Budgets</span>
+                    </a>
+                </li>
+                <li class="sidebar-item ${param.activePage == 'reports' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/user/reports">
+                        <span>Reports</span>
+                    </a>
+                </li>
+                <li class="sidebar-item ${param.activePage == 'profile' ? 'active' : ''}">
+                    <a href="${pageContext.request.contextPath}/user/profile">
+                        <span>Profile & Advice</span>
+                    </a>
+                </li>
+            </ul>
+        </c:otherwise>
+    </c:choose>
 
     <!-- Logout Link -->
     <ul class="sidebar-menu" style="margin-top: auto;">
