@@ -55,10 +55,33 @@
         top: 0;
         left: 0;
         bottom: 0;
+        height: 100vh;
         z-index: 200;
         transform: translateX(-100%);
         box-shadow: 4px 0 20px rgba(0, 0, 0, 0.4);
         width: 260px;
+        padding-top: var(--space-3);
+    }
+
+    .sidebar-brand {
+        display: block;
+    }
+
+    .app-navbar {
+        padding: 0 var(--space-2);
+    }
+
+    .navbar-actions {
+        gap: var(--space-2);
+    }
+
+    .timeline-row {
+        grid-template-columns: 1fr 56px;
+    }
+
+    .timeline-track {
+        grid-column: 1 / -1;
+        order: 3;
     }
 
     .app-sidebar.open {
@@ -106,6 +129,10 @@
 
     .content-wrapper {
         padding: var(--space-2);
+    }
+
+    .user-profile-badge > span:first-child {
+        display: none;
     }
 
     .card {

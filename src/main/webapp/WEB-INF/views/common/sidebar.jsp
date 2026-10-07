@@ -83,6 +83,15 @@
         </c:otherwise>
     </c:choose>
 
+    <div class="sidebar-heading">Help</div>
+    <ul class="sidebar-menu mb-3">
+        <li class="sidebar-item">
+            <a href="${pageContext.request.contextPath}/docs">
+                <span>Docs &amp; how it works</span>
+            </a>
+        </li>
+    </ul>
+
     <!-- Logout Link -->
     <ul class="sidebar-menu" style="margin-top: auto;">
         <li class="sidebar-item">

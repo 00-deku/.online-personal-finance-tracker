@@ -30,6 +30,17 @@
     gap: var(--space-3);
 }
 
+.navbar-link {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    padding: 4px 2px;
+}
+
+.navbar-link:hover,
+.navbar-link.active {
+    color: var(--text-primary);
+}
+
 .user-profile-badge {
     display: flex;
     align-items: center;
@@ -53,12 +64,23 @@
 /* --- Sidebar Nav --- */
 .app-sidebar {
     width: 220px;
+    flex-shrink: 0;
     background-color: var(--bg-card);
     border-right: 1px solid var(--border);
     display: flex;
     flex-direction: column;
-    padding: var(--space-3) 0;
+    padding: var(--space-2) 0;
     transition: transform var(--transition);
+    /* Stay in view below the sticky 56px navbar while the content scrolls */
+    position: sticky;
+    top: 56px;
+    height: calc(100vh - 56px);
+    overflow-y: auto;
+}
+
+/* The navbar already shows the brand on desktop; the sidebar copy is for the mobile drawer */
+.sidebar-brand {
+    display: none;
 }
 
 .sidebar-brand {
@@ -169,6 +191,14 @@
     transition: width var(--transition);
 }
 
+.progress-bar.warning {
+    background-color: var(--warning);
+}
+
+.progress-bar.danger {
+    background-color: var(--danger);
+}
+
 /* --- Advice Cards --- */
 .advice-card {
     background-color: var(--bg-input);
@@ -225,6 +255,113 @@
     height: 100%;
     background-color: var(--text-secondary);
     border-radius: var(--radius-sm);
+}
+
+/* --- Parallel Execution Timeline (shows how a page's work was split across threads) --- */
+.parallel-panel {
+    margin-top: var(--space-4);
+}
+
+.parallel-panel > summary {
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-2);
+    flex-wrap: wrap;
+}
+
+.parallel-panel > summary::-webkit-details-marker {
+    display: none;
+}
+
+.parallel-panel > summary::after {
+    content: "Show details";
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 2px 8px;
+}
+
+.parallel-panel[open] > summary::after {
+    content: "Hide details";
+}
+
+.parallel-summary-stats {
+    display: flex;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.parallel-summary-stats strong {
+    color: var(--text-primary);
+    font-family: var(--font-mono);
+    font-weight: 500;
+}
+
+.timeline {
+    margin-top: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.timeline-row {
+    display: grid;
+    grid-template-columns: minmax(140px, 200px) 1fr 64px;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: 0.8rem;
+}
+
+.timeline-label {
+    color: var(--text-primary);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.timeline-thread {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    color: var(--text-muted);
+}
+
+.timeline-track {
+    position: relative;
+    height: 10px;
+    background-color: var(--bg-input);
+    border-radius: 999px;
+}
+
+.timeline-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    min-width: 4px;
+    background-color: var(--text-secondary);
+    border-radius: 999px;
+}
+
+.timeline-bar.failed {
+    background-color: var(--danger);
+}
+
+.timeline-ms {
+    text-align: right;
+    font-family: var(--font-mono);
+    color: var(--text-secondary);
+}
+
+.timeline-note {
+    margin-top: var(--space-2);
+    font-size: 0.78rem;
+    color: var(--text-muted);
 }
 
 /* --- Footer --- */

@@ -208,6 +208,8 @@
 
             </div>
 
+            <jsp:include page="../common/parallel-timeline.jsp"/>
+
         </div>
 <jsp:include page="../common/footer.jsp"/>
 

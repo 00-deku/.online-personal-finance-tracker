@@ -18,6 +18,16 @@
     --border: #2B2B28;
     --border-subtle: #20201E;
 
+    --success: #8FB39A;
+    --success-bg: #18201A;
+    --success-border: #27382B;
+    --warning: #CDB27A;
+    --warning-bg: #221E15;
+    --warning-border: #3E3622;
+    --danger: #C57D7D;
+    --danger-bg: #211616;
+    --danger-border: #3D2222;
+
     --button-bg: #C5C2BA;
     --button-text: #171716;
     --button-hover: #D2CFC7;
@@ -98,6 +108,22 @@ a {
 
 a:hover {
     color: #FFFFFF;
+}
+
+a:focus-visible {
+    outline: 2px solid var(--text-secondary);
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+code {
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    background-color: var(--bg-input);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 1px 5px;
+    color: var(--text-primary);
 }
 
 small, .text-muted {
@@ -409,15 +435,34 @@ select.form-control {
 }
 
 .alert-error {
-    background-color: #211616;
-    border-color: #3D2222;
-    color: #C57D7D;
+    background-color: var(--danger-bg);
+    border-color: var(--danger-border);
+    color: var(--danger);
+}
+
+.alert-success {
+    background-color: var(--success-bg);
+    border-color: var(--success-border);
+    color: var(--success);
+}
+
+.alert-warning {
+    background-color: var(--warning-bg);
+    border-color: var(--warning-border);
+    color: var(--warning);
+}
+
+.alert-info {
+    background-color: var(--bg-surface-secondary);
+    border-color: var(--border);
+    color: var(--text-primary);
 }
 
 /* --- Layout Structure --- */
 .app-container {
     display: flex;
-    min-height: 100vh;
+    flex: 1;
+    min-height: calc(100vh - 56px); /* viewport minus the sticky navbar */
     background-color: var(--bg-main);
 }
 
@@ -459,6 +504,7 @@ select.form-control {
 
 /* --- Utility Helpers --- */
 .text-right { text-align: right; }
+.text-secondary { color: var(--text-secondary); }
 .text-center { text-align: center; }
 .font-mono { font-family: var(--font-mono); }
 .flex { display: flex; }
@@ -469,6 +515,7 @@ select.form-control {
 .gap-2 { gap: var(--space-2); }
 .gap-3 { gap: var(--space-3); }
 .gap-4 { gap: var(--space-4); }
+.mb-0 { margin-bottom: 0; }
 .mb-1 { margin-bottom: var(--space-1); }
 .mb-2 { margin-bottom: var(--space-2); }
 .mb-3 { margin-bottom: var(--space-3); }

@@ -1,5 +1,6 @@
 package com.finance.servlet.admin;
 
+import com.finance.concurrent.ParallelBatch;
 import com.finance.exception.DatabaseException;
 import com.finance.model.Feedback;
 import com.finance.model.User;
@@ -15,6 +16,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Controller servlet presenting system overview statistics, user queues, and pending feedback for Admin view.
@@ -46,12 +48,21 @@ public class AdminDashboardServlet extends HttpServlet {
         }
 
         try {
-            int totalUserCount = userService.getTotalUserCount();
-            int totalExpensesCount = expenseService.getTotalSystemExpensesCount();
-            int pendingFeedbackCount = feedbackService.getPendingFeedbackCount();
+            // Counts and lists are independent queries, so load them in parallel.
+            ParallelBatch batch = new ParallelBatch("Admin dashboard");
+            CompletableFuture<Integer> userCountF = batch.fork("User count", userService::getTotalUserCount);
+            CompletableFuture<Integer> expenseCountF = batch.fork("Expense count", expenseService::getTotalSystemExpensesCount);
+            CompletableFuture<Integer> pendingF = batch.fork("Pending feedback count", feedbackService::getPendingFeedbackCount);
+            CompletableFuture<List<User>> usersF = batch.fork("All users", userService::getAllUsers);
+            CompletableFuture<List<Feedback>> feedbackF = batch.fork("All feedback", feedbackService::getAllFeedback);
+            batch.awaitAll();
 
-            List<User> recentUserList = userService.getAllUsers();
-            List<Feedback> feedbackList = feedbackService.getAllFeedback();
+            int totalUserCount = ParallelBatch.result(userCountF);
+            int totalExpensesCount = ParallelBatch.result(expenseCountF);
+            int pendingFeedbackCount = ParallelBatch.result(pendingF);
+            List<User> recentUserList = ParallelBatch.result(usersF);
+            List<Feedback> feedbackList = ParallelBatch.result(feedbackF);
+            request.setAttribute("parallelBatch", batch);
 
             request.setAttribute("totalUserCount", totalUserCount);
             request.setAttribute("totalExpensesCount", totalExpensesCount);
@@ -59,7 +70,6 @@ public class AdminDashboardServlet extends HttpServlet {
 
             request.setAttribute("recentUserList", recentUserList.isEmpty() ? null : recentUserList);
             request.setAttribute("feedbackList", feedbackList.isEmpty() ? null : feedbackList);
-
 
             request.getRequestDispatcher("/WEB-INF/views/admin/dashboard.jsp").forward(request, response);
 

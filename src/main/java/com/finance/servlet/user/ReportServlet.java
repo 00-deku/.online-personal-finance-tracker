@@ -54,6 +54,7 @@ public class ReportServlet extends HttpServlet {
             }
 
             request.setAttribute("categoriesList", reportData.getCategoriesList());
+            request.setAttribute("parallelBatch", reportData.getBatch());
             request.getRequestDispatcher("/WEB-INF/views/user/reports.jsp").forward(request, response);
 
         } catch (DatabaseException e) {

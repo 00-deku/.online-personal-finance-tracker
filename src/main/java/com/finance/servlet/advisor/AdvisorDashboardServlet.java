@@ -1,5 +1,6 @@
 package com.finance.servlet.advisor;
 
+import com.finance.concurrent.ParallelBatch;
 import com.finance.exception.DatabaseException;
 import com.finance.model.Advice;
 import com.finance.model.User;
@@ -14,6 +15,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Controller servlet synthesizing Advisor dashboard statistics and client recommendation logs.
@@ -45,10 +47,18 @@ public class AdvisorDashboardServlet extends HttpServlet {
         try {
             String advisorId = advisor.getId();
 
-            int adviceCount = adviceService.getIssuedAdviceCount(advisorId);
-            int uniqueUsersAdvised = adviceService.getUniqueUsersAdvisedCount(advisorId);
-            List<Advice> adviceList = adviceService.getAdviceByAdvisor(advisorId);
-            List<User> clientUserList = userService.getAllUsers();
+            ParallelBatch batch = new ParallelBatch("Advisor dashboard");
+            CompletableFuture<Integer> adviceCountF = batch.fork("Issued advice count", () -> adviceService.getIssuedAdviceCount(advisorId));
+            CompletableFuture<Integer> uniqueF = batch.fork("Unique users advised", () -> adviceService.getUniqueUsersAdvisedCount(advisorId));
+            CompletableFuture<List<Advice>> adviceF = batch.fork("Advice history", () -> adviceService.getAdviceByAdvisor(advisorId));
+            CompletableFuture<List<User>> clientsF = batch.fork("Client list", userService::getAllUsers);
+            batch.awaitAll();
+
+            int adviceCount = ParallelBatch.result(adviceCountF);
+            int uniqueUsersAdvised = ParallelBatch.result(uniqueF);
+            List<Advice> adviceList = ParallelBatch.result(adviceF);
+            List<User> clientUserList = ParallelBatch.result(clientsF);
+            request.setAttribute("parallelBatch", batch);
 
             // Pass numeric metrics directly (0 is a valid value)
             request.setAttribute("adviceCount", adviceCount);

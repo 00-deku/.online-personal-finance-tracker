@@ -1,5 +1,6 @@
 package com.finance.servlet.user;
 
+import com.finance.concurrent.ParallelBatch;
 import com.finance.exception.DatabaseException;
 import com.finance.model.Advice;
 import com.finance.model.Budget;
@@ -19,6 +20,7 @@ import jakarta.servlet.http.HttpSession;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * Controller servlet synthesizing financial summary cards and dashboard feeds for User view.
@@ -52,15 +54,28 @@ public class UserDashboardServlet extends HttpServlet {
         try {
             String userId = user.getId();
 
-            // Load financial metrics
-            BigDecimal totalExpenses = expenseService.getTotalExpenses(userId);
-            BigDecimal totalBudget = budgetService.getTotalBudget(userId);
-            BigDecimal remainingBudget = budgetService.getRemainingBudget(userId);
+            // Fork the seven independent dashboard queries onto the shared worker pool.
+            // Each DAO call opens its own JDBC connection, so they can run side by side.
+            ParallelBatch batch = new ParallelBatch("User dashboard");
+            CompletableFuture<BigDecimal> totalExpensesF = batch.fork("Total expenses", () -> expenseService.getTotalExpenses(userId));
+            CompletableFuture<BigDecimal> totalBudgetF = batch.fork("Total budget", () -> budgetService.getTotalBudget(userId));
+            CompletableFuture<BigDecimal> remainingF = batch.fork("Remaining budget", () -> budgetService.getRemainingBudget(userId));
+            CompletableFuture<List<Expense>> recentF = batch.fork("Recent expenses", () -> expenseService.getRecentExpenses(userId, 5));
+            CompletableFuture<List<CategorySummary>> breakdownF = batch.fork("Category breakdown", () -> expenseService.getCategoryBreakdown(userId));
+            CompletableFuture<Budget> activeBudgetF = batch.fork("Active budget", () -> budgetService.getPrimaryActiveBudget(userId));
+            CompletableFuture<List<Advice>> adviceF = batch.fork("Advisor advice", () -> adviceService.getAdviceForUser(userId));
 
-            List<Expense> recentExpenses = expenseService.getRecentExpenses(userId, 5);
-            List<CategorySummary> categoryBreakdown = expenseService.getCategoryBreakdown(userId);
-            Budget activeBudget = budgetService.getPrimaryActiveBudget(userId);
-            List<Advice> adviceList = adviceService.getAdviceForUser(userId);
+            // The request thread waits once for all of them instead of seven times in a row.
+            batch.awaitAll();
+
+            BigDecimal totalExpenses = ParallelBatch.result(totalExpensesF);
+            BigDecimal totalBudget = ParallelBatch.result(totalBudgetF);
+            BigDecimal remainingBudget = ParallelBatch.result(remainingF);
+            List<Expense> recentExpenses = ParallelBatch.result(recentF);
+            List<CategorySummary> categoryBreakdown = ParallelBatch.result(breakdownF);
+            Budget activeBudget = ParallelBatch.result(activeBudgetF);
+            List<Advice> adviceList = ParallelBatch.result(adviceF);
+            request.setAttribute("parallelBatch", batch);
 
             // Pass attributes to JSP template engine
             request.setAttribute("totalExpenses", totalExpenses != null ? totalExpenses : BigDecimal.ZERO);
