@@ -66,4 +66,4 @@ Dashboards and reports load their data in parallel on one shared worker pool (`c
 - `AppLifecycleListener` – starts/stops the pool and a `ScheduledExecutorService` that samples pool activity
 - `ConcurrencyMonitor` – lock-free stats shown on `/docs` (live via `/api/concurrency`)
 
-Each dashboard has a **Parallel execution** panel showing which thread ran each query and how long it took. Full explanation: `/docs`.
+Each dashboard has a **Parallel execution** panel showing which thread ran each query and how long it took for that. Full explanation: `/docs`.
