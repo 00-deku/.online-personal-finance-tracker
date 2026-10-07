@@ -10,6 +10,8 @@
     </div>
 
     <div class="navbar-actions">
+        <a href="${pageContext.request.contextPath}/docs" class="navbar-link">Docs</a>
+
         <%-- Display session user details if logged in --%>
         <div class="user-profile-badge">
             <span>${sessionScope.user != null ? sessionScope.user.name : (param.role != null ? param.role : 'Account')}</span>

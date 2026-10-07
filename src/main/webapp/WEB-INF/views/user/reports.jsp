@@ -15,7 +15,13 @@
 
     <main class="main-content">
         <div class="content-wrapper">
-            
+
+            <c:if test="${not empty errorMessage}">
+                <div class="alert alert-error mb-4">
+                    ${errorMessage}
+                </div>
+            </c:if>
+
             <div class="page-header">
                 <div>
                     <h1 class="page-title">Reports</h1>
@@ -123,6 +129,8 @@
                     </div>
                 </c:otherwise>
             </c:choose>
+
+            <jsp:include page="../common/parallel-timeline.jsp"/>
 
         </div>
 <jsp:include page="../common/footer.jsp"/>

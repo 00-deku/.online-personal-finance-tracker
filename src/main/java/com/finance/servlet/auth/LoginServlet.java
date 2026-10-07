@@ -30,6 +30,14 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) 
             throws ServletException, IOException {
+        // Already signed in: skip the form and go to the role's dashboard
+        HttpSession session = request.getSession(false);
+        User current = (session != null) ? (User) session.getAttribute("user") : null;
+        if (current != null) {
+            redirectToDashboard(request, response, current);
+            return;
+        }
+
         // Forward request to login JSP view
         request.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(request, response);
     }
@@ -48,15 +56,7 @@ public class LoginServlet extends HttpServlet {
             HttpSession session = request.getSession(true);
             session.setAttribute("user", user);
 
-            // Role-based redirection upon successful login
-            String role = user.getRole();
-            if ("ADMIN".equalsIgnoreCase(role)) {
-                response.sendRedirect(request.getContextPath() + "/admin/dashboard");
-            } else if ("ADVISOR".equalsIgnoreCase(role)) {
-                response.sendRedirect(request.getContextPath() + "/advisor/dashboard");
-            } else {
-                response.sendRedirect(request.getContextPath() + "/user/dashboard");
-            }
+            redirectToDashboard(request, response, user);
 
         } catch (ValidationException | AuthenticationException e) {
             request.setAttribute("errorMessage", e.getMessage());
@@ -64,6 +64,21 @@ public class LoginServlet extends HttpServlet {
         } catch (DatabaseException e) {
             request.setAttribute("errorMessage", "Database error encountered during authentication.");
             request.getRequestDispatcher("/WEB-INF/views/auth/login.jsp").forward(request, response);
+        }
+    }
+
+    /**
+     * Role-based redirection to the matching dashboard.
+     */
+    private void redirectToDashboard(HttpServletRequest request, HttpServletResponse response, User user)
+            throws IOException {
+        String role = user.getRole();
+        if ("ADMIN".equalsIgnoreCase(role)) {
+            response.sendRedirect(request.getContextPath() + "/admin/dashboard");
+        } else if ("ADVISOR".equalsIgnoreCase(role)) {
+            response.sendRedirect(request.getContextPath() + "/advisor/dashboard");
+        } else {
+            response.sendRedirect(request.getContextPath() + "/user/dashboard");
         }
     }
 }
