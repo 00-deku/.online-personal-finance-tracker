@@ -572,3 +572,5 @@ GitHub:
 https://github.com/shreybaba/Online-Personal-Finance-Tracker
 
 The repository contains the application source code, database schema, configuration template, documentation, and files required to understand and run the project locally.
+
+Tip: Keep a copy of db.properties out of version control to protect your credentials.
