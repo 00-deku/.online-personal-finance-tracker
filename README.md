@@ -67,3 +67,5 @@ Dashboards and reports load their data in parallel on one shared worker pool (`c
 - `ConcurrencyMonitor` – lock-free stats shown on `/docs` (live via `/api/concurrency`)
 
 Each dashboard has a **Parallel execution** panel showing which thread ran each query and how long it took. Full explanation: `/docs`.
+
+Tip: Keep a copy of db.properties out of version control to protect your credentials.
