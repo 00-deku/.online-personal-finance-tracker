@@ -1,0 +1,5 @@
+# Rename db.properties.example to db.properties first. then write your mysql password below
+
+db.url=jdbc:mysql://localhost:3306/suspicious4
+db.user=root
+db.password=your_actual_password_here
